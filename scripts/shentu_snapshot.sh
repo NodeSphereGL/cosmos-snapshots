@@ -33,7 +33,7 @@ log_this "Stopping ${SERVICE_NAME}"
 systemctl stop ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
 
 log_this "Creating new snapshot"
-time tar -cf - -C ${DATA_PATH} . | lz4 > ${HOME}/${SNAP_NAME} &>> ${LOG_PATH}
+time tar -cf - -C ${DATA_PATH} . | lz4 - > ${HOME}/${SNAP_NAME} 2>&1 | tee -a ${LOG_PATH}
 
 log_this "Starting ${SERVICE_NAME}"
 systemctl start ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
@@ -43,7 +43,7 @@ cd ${SNAP_PATH}
 rm -fv ${OLD_SNAP} &>>${LOG_PATH}
 
 log_this "Moving new snapshot to ${SNAP_PATH}"
-mv ${HOME}/${CHAIN_ID}*lz4 ${SNAP_PATH} &>>${LOG_PATH}
+mv ${HOME}/${CHAIN_ID}*lz4 ${SNAP_PATH}
 
 du -hs ${SNAP_PATH} | tee -a ${LOG_PATH}
 
