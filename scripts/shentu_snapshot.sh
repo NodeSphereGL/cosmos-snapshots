@@ -4,8 +4,8 @@ source ./common.sh
 
 # Define variables
 CHAIN_ID="shentu-2.2"
-SNAP_PATH="$HOME/snapshots/shentu"
-LOG_PATH="$HOME/snapshots/shentu/shentu.log"
+SNAP_PATH="/var/snapshots/shentu"
+LOG_PATH="/var/snapshots/shentu/shentu.log"
 DATA_PATH="$HOME/.shentud/data/"
 SERVICE_NAME="shentud.service"
 RPC_ADDRESS="http://127.0.0.1:14657"
