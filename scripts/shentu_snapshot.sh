@@ -24,7 +24,6 @@ fi
 
 # Generate new snap name, collect old name
 SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar.lz4")
-OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*lz4")
 
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
@@ -40,7 +39,8 @@ systemctl start ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
 
 log_this "Removing old snapshot(s):"
 cd ${SNAP_PATH}
-rm -fv ${OLD_SNAP} &>>${LOG_PATH}
+# Find and remove .lz4 files older than 24 hours
+find . -name "*.lz4" -type f -mtime +1 -exec rm -fv {} \; &>>${LOG_PATH}
 
 log_this "Moving new snapshot to ${SNAP_PATH}"
 mv ${HOME}/${CHAIN_ID}*lz4 ${SNAP_PATH}
