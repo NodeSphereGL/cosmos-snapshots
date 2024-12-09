@@ -9,8 +9,6 @@ LOG_PATH="$HOME/snapshots/shentu/shentu.log"
 DATA_PATH="$HOME/.shentud/data/"
 SERVICE_NAME="shentud.service"
 RPC_ADDRESS="http://127.0.0.1:14657"
-SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar.lz4")
-OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*lz4")
 
 # Check if the directory exists, if not, create it
 if [ ! -d "$SNAP_PATH" ]; then
@@ -24,6 +22,9 @@ if [ ! -f "$LOG_PATH" ]; then
     touch "$LOG_PATH"
 fi
 
+# Generate new snap name, collect old name
+SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar.lz4")
+OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*lz4")
 
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
